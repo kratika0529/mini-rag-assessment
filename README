@@ -1,0 +1,76 @@
+# Mini RAG: AI Research Assistant 📚
+
+A production-style Retrieval-Augmented Generation (RAG) application that delivers accurate, grounded answers with citations from custom datasets.  
+This project demonstrates an end-to-end AI engineering pipeline including document ingestion, vector search, reranking, and LLM-based answer generation.
+
+Built as part of the Generative AI Engineer Assessment (Track B – Mini RAG).
+
+---
+
+## 👤 Candidate Information
+
+- Name: Kratika  
+- Assessment Track: AI Engineer – Track B (Mini RAG)  
+- Resume: https://drive.google.com/file/d/1dGmlUV0Zw7cWG8Mb0g8CPhJR3CJjkSAX/view?usp=sharing
+- LinkedIn: https://www.linkedin.com/in/kratika-singh-40a3b231b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app
+
+---
+
+## 🎯 Project Objective
+
+The goal of this project is to design and deploy a small but complete RAG system where:
+
+1. Users provide text or documents
+2. Content is embedded and stored in a cloud-hosted vector database
+3. Relevant chunks are retrieved and reranked
+4. A Large Language Model generates a grounded answer
+5. All responses include inline citations mapped to source chunks
+
+---
+
+## 🏗️ System Architecture
+
+The system follows a Retrieve → Rerank → Generate pipeline to ensure that only the most relevant context is provided to the LLM.
+
+```mermaid
+graph TD
+    A[User Text / Document Upload] --> B[Chunking: 1000 chars, overlap]
+    B --> C[Google text-embedding-004]
+    C --> D[(Pinecone Vector Database)]
+    
+    E[User Query] --> F[Vector Search: Top 10]
+    D --> F
+    
+    F --> G[Cohere Rerank v3.0]
+    G --> H[Top 3 Relevant Chunks]
+    
+    H --> I[Gemini 2.5 Flash]
+    I --> J[Final Answer with Inline Citations]
+  ## 📊 Minimal Evaluation (Gold Set)
+Tested using the IIT Mandidataset to verify retrieval precision and refusal logic.
+
+| Query | Expected Fact | Result | Citation Correct? |
+| :--- | :--- | :--- | :--- |
+| "When was IIT Mandi established?" | 2009 | ✅ Pass | ✅ Yes [1] |
+| "What are the two main campuses?" | North and South Campus | ✅ Pass | ✅ Yes [1, 2] |
+| "Who was the founding director?" | Timothy A. Gonsalves | ✅ Pass | ✅ Yes [1] |
+| "What river flows near the campus?" | Uhl River | ✅ Pass | ✅ Yes [2] |
+| "Does the campus have a metro station?" | Not mentioned in text | ✅ Pass (Correct Refusal) | N/A |
+
+## 🛠️ Tech Stack
+* Frontend:Streamlit 
+* Vector DB:Pinecone (Serverless)
+* Embeddings:Google `text-embedding-004`
+* Reranker:Cohere `rerank-english-v3.0`
+* LLM:Google `gemini-2.5-flash`
+
+## 🚀 Setup & Installation
+1. Clone & Install:
+   ```bash
+   git clone <your-repo-link>
+   pip install -r requirements.txt
+   python -m streamlit run app.py #to run the app
+   ### You are ready to submit!1. Save the file as `README.md`.
+2. Push to GitHub.
+3. Send the GitHub URL and the Streamlit Live URL to the recruiter.
+
